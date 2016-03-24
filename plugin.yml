@@ -1,0 +1,5 @@
+name: StopGen
+main: com.sucy.gen.StopGen
+author: Eniripsa96
+version: 1.0
+load: STARTUP

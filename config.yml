@@ -1,0 +1,12 @@
+all-chunks: false
+worlds:
+  world:
+    type: all
+  world2:
+    type: radius
+    size: 1000, 1000
+    center: 0, 0
+  world3:
+    type: box
+    size: 1000, 1000
+    center: 0, 0
