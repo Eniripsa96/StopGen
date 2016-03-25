@@ -45,6 +45,7 @@ public class NMSManager_18R3
 
             NoChunkProvider wrapper = new NoChunkProvider(nmsWorld, (IChunkLoader) chunkLoader.get(provider), provider.chunkProvider);
             chunkProvider.set(nmsWorld, wrapper);
+            nmsWorld.chunkProviderServer = wrapper;
         }
         catch (Exception ex)
         {
