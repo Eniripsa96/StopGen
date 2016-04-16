@@ -111,7 +111,7 @@ public class NoChunkProvider
                 {
                     if ((x != 0) || (z != 0))
                     {
-                        Chunk neighbor = getChunkIfLoaded(chunk.locX + x, chunk.locZ + z);
+                        Chunk neighbor = getLoadedChunkAtWithoutMarkingActive(chunk.locX + x, chunk.locZ + z);
                         if (neighbor != null)
                         {
                             neighbor.setNeighborLoaded(-x, -z);
