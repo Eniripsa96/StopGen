@@ -66,8 +66,6 @@ public class NoChunkProvider
 
         if (chunk == null)
         {
-            this.world.timings.syncChunkLoadTimer.startTiming();
-
             chunk = loadChunk(i, j);
             boolean newChunk = false;
             boolean empty = false;
@@ -123,7 +121,6 @@ public class NoChunkProvider
                 }
             }
             chunk.loadNearby(this, this.chunkGenerator);
-            this.world.timings.syncChunkLoadTimer.stopTiming();
         }
 
         return chunk;

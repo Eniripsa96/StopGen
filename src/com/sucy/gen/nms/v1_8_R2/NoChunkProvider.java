@@ -65,7 +65,7 @@ public class NoChunkProvider
         this.unloadQueue.remove(i, j);
         Chunk chunk = this.chunks.get(LongHash.toLong(i, j));
         if (chunk == null) {
-            this.world.timings.syncChunkLoadTimer.startTiming();
+
             chunk = loadChunk(i, j);
             boolean newChunk = false;
             boolean empty = false;
@@ -118,7 +118,6 @@ public class NoChunkProvider
             }
 
             chunk.loadNearby(this, this, i, j);
-            this.world.timings.syncChunkLoadTimer.stopTiming();
         }
 
         return chunk;
