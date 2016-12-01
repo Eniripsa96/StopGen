@@ -24,17 +24,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.sucy.gen.nms.v1_9_R1;
+package com.sucy.gen.nms.v1_9_R2;
 
-import net.minecraft.server.v1_9_R1.BlockPosition;
-import net.minecraft.server.v1_9_R1.Blocks;
-import net.minecraft.server.v1_9_R1.IBlockData;
-import net.minecraft.server.v1_9_R1.World;
+import net.minecraft.server.v1_9_R2.*;
 
 /**
  * Represents a chunk that wasn't generated and won't be saved
  */
-public class NoChunk extends net.minecraft.server.v1_9_R1.Chunk
+public class NoChunk extends Chunk
 {
     /**
      * Initializes the chunk

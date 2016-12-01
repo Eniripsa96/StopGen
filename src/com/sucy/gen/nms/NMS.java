@@ -1,5 +1,5 @@
 /**
- * MineNight
+ * StopGen
  * com.sucy.minenight.nms.NMS
  *
  * The MIT License (MIT)
@@ -26,10 +26,13 @@
  */
 package com.sucy.gen.nms;
 
+import com.sucy.gen.nms.v1_10_R1.NMSManager_110R1;
+import com.sucy.gen.nms.v1_11_R1.NMSManager_111R1;
 import com.sucy.gen.nms.v1_8_R1.NMSManager_18R1;
 import com.sucy.gen.nms.v1_8_R2.NMSManager_18R2;
 import com.sucy.gen.nms.v1_8_R3.NMSManager_18R3;
 import com.sucy.gen.nms.v1_9_R1.NMSManager_19R1;
+import com.sucy.gen.nms.v1_9_R2.NMSManager_19R2;
 import org.bukkit.Bukkit;
 
 import java.util.regex.Matcher;
@@ -60,10 +63,16 @@ public class NMS
                     manager = new NMSManager_18R3();
                 else if (pack.equals("v1_9_R1"))
                     manager = new NMSManager_19R1();
+                else if (pack.equals("v1_9_R2"))
+                    manager = new NMSManager_19R2();
+                else if (pack.equals("v1_10_R1"))
+                    manager = new NMSManager_110R1();
+                else if (pack.equals("v1_11_R1"))
+                    manager = new NMSManager_111R1();
                 else
-                    Bukkit.getLogger().info(pack);
+                    Bukkit.getLogger().info("StopGen doesn't support the version " + pack);
             }
-            else Bukkit.getLogger().info("No match");
+            else Bukkit.getLogger().info("Unable to determine the server version");
         }
         catch (Exception ex)
         {

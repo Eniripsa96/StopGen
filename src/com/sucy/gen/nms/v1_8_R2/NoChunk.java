@@ -1,5 +1,5 @@
 /**
- * MineNight
+ * StopGen
  * com.sucy.minenight.nms.v1_9_R1.EmptyChunk
  *
  * The MIT License (MIT)

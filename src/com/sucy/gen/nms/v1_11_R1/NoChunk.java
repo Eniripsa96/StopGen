@@ -24,17 +24,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.sucy.gen.nms.v1_9_R1;
+package com.sucy.gen.nms.v1_11_R1;
 
-import net.minecraft.server.v1_9_R1.BlockPosition;
-import net.minecraft.server.v1_9_R1.Blocks;
-import net.minecraft.server.v1_9_R1.IBlockData;
-import net.minecraft.server.v1_9_R1.World;
+import net.minecraft.server.v1_11_R1.BlockPosition;
+import net.minecraft.server.v1_11_R1.Blocks;
+import net.minecraft.server.v1_11_R1.Chunk;
+import net.minecraft.server.v1_11_R1.ChunkGenerator;
+import net.minecraft.server.v1_11_R1.IBlockData;
+import net.minecraft.server.v1_11_R1.IChunkProvider;
+import net.minecraft.server.v1_11_R1.World;
 
 /**
  * Represents a chunk that wasn't generated and won't be saved
  */
-public class NoChunk extends net.minecraft.server.v1_9_R1.Chunk
+public class NoChunk extends Chunk
 {
     /**
      * Initializes the chunk
@@ -66,14 +69,49 @@ public class NoChunk extends net.minecraft.server.v1_9_R1.Chunk
     /**
      * Ignore block changes so players don't build in this zone
      *
-     * @param blockposition block position
-     * @param iblockdata    block data
+     * @param blockPosition block position
+     * @param blockData    block data
      *
      * @return null
      */
     @Override
-    public IBlockData a(BlockPosition blockposition, IBlockData iblockdata)
+    public IBlockData a(BlockPosition blockPosition, IBlockData blockData)
     {
         return null;
+    }
+
+    /**
+     * No need to populate the chunk
+     *
+     * @param chunkGenerator chunk generator
+     */
+    @Override
+    public void a(ChunkGenerator chunkGenerator) { }
+
+    /**
+     * Handles marking loaded flags for neighbors
+     *
+     * @param iChunkProvider not used
+     * @param chunkGenerator not used
+     * @param newChunk       not used
+     */
+    @Override
+    public void loadNearby(IChunkProvider iChunkProvider, ChunkGenerator chunkGenerator, boolean newChunk)
+    {
+        for (int x = -2; x < 3; x++)
+        {
+            for (int z = -2; z < 3; z++)
+            {
+                if ((x != 0) || (z != 0))
+                {
+                    Chunk neighbor = getWorld().getChunkIfLoaded(locX + x, locZ + z);
+                    if (neighbor != null)
+                    {
+                        neighbor.setNeighborLoaded(-x, -z);
+                        setNeighborLoaded(x, z);
+                    }
+                }
+            }
+        }
     }
 }

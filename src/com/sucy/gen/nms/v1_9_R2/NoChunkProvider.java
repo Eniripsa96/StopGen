@@ -24,12 +24,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.sucy.gen.nms.v1_8_R1;
+package com.sucy.gen.nms.v1_9_R2;
 
 import com.sucy.gen.StopGen;
-import net.minecraft.server.v1_8_R1.*;
+import net.minecraft.server.v1_9_R2.*;
 import org.bukkit.Server;
-import org.bukkit.craftbukkit.v1_8_R1.util.LongHash;
+import org.bukkit.craftbukkit.v1_9_R2.util.LongHash;
 import org.bukkit.event.world.ChunkLoadEvent;
 
 /**
@@ -45,7 +45,7 @@ public class NoChunkProvider
      * @param ichunkloader   chunk loader from normal provider
      * @param chunkgenerator chunk generator from normal provider
      */
-    public NoChunkProvider(WorldServer worldserver, IChunkLoader ichunkloader, IChunkProvider chunkgenerator)
+    public NoChunkProvider(WorldServer worldserver, IChunkLoader ichunkloader, ChunkGenerator chunkgenerator)
     {
         super(worldserver, ichunkloader, chunkgenerator);
     }
@@ -62,37 +62,38 @@ public class NoChunkProvider
     @Override
     public Chunk originalGetChunkAt(int i, int j)
     {
-        this.unloadQueue.remove(i, j);
-        Chunk chunk = this.chunks.get(LongHash.toLong(i, j));
-        if (chunk == null) {
+        Chunk chunk = getOrLoadChunkAt(i, j);
 
+        if (chunk == null)
+        {
             chunk = loadChunk(i, j);
             boolean newChunk = false;
             boolean empty = false;
-
-            if (chunk == null) {
-                if (this.chunkProvider == null)
-                    chunk = this.emptyChunk;
-                else if (StopGen.shouldGenerate(world.getWorld().getName(), i, j))
+            if (chunk == null)
+            {
+                if (StopGen.shouldGenerate(world.getWorld().getName(), i, j))
                 {
-                    try {
-                        chunk = this.chunkProvider.getOrCreateChunk(i, j);
-                    } catch (Throwable throwable) {
+                    try
+                    {
+                        chunk = this.chunkGenerator.getOrCreateChunk(i, j);
+                    }
+                    catch (Throwable throwable)
+                    {
                         CrashReport crashreport = CrashReport.a(throwable, "Exception generating new chunk");
                         CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Chunk to be generated");
 
                         crashreportsystemdetails.a("Location", String.format("%d,%d", i, j));
-                        crashreportsystemdetails.a("Position hash", LongHash.toLong(i, j));
-                        crashreportsystemdetails.a("Generator", this.chunkProvider.getName());
+                        crashreportsystemdetails.a("Position hash", ChunkCoordIntPair.a(i, j));
+                        crashreportsystemdetails.a("Generator", this.chunkGenerator);
                         throw new ReportedException(crashreport);
                     }
+                    newChunk = true;
                 }
                 else
                 {
                     chunk = new NoChunk(world, i, j);
                     empty = true;
                 }
-                newChunk = true;
             }
 
             this.chunks.put(LongHash.toLong(i, j), chunk);
@@ -104,20 +105,22 @@ public class NoChunkProvider
                 server.getPluginManager().callEvent(new ChunkLoadEvent(chunk.bukkitChunk, newChunk));
             }
 
-            for (int x = -2; x < 3; x++) {
-                for (int z = -2; z < 3; z++) {
+            for (int x = -2; x < 3; x++)
+            {
+                for (int z = -2; z < 3; z++)
+                {
                     if ((x != 0) || (z != 0))
                     {
-                        Chunk neighbor = getChunkIfLoaded(chunk.locX + x, chunk.locZ + z);
-                        if (neighbor != null) {
+                        Chunk neighbor = getLoadedChunkAt(chunk.locX + x, chunk.locZ + z);
+                        if (neighbor != null)
+                        {
                             neighbor.setNeighborLoaded(-x, -z);
                             chunk.setNeighborLoaded(x, z);
                         }
                     }
                 }
             }
-
-            chunk.loadNearby(this, this, i, j);
+            chunk.loadNearby(this, this.chunkGenerator);
         }
 
         return chunk;
