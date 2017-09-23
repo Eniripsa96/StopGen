@@ -28,6 +28,7 @@ package com.sucy.gen.nms;
 
 import com.sucy.gen.nms.v1_10_R1.NMSManager_110R1;
 import com.sucy.gen.nms.v1_11_R1.NMSManager_111R1;
+import com.sucy.gen.nms.v1_12_R1.NMSManager_112R1;
 import com.sucy.gen.nms.v1_8_R1.NMSManager_18R1;
 import com.sucy.gen.nms.v1_8_R2.NMSManager_18R2;
 import com.sucy.gen.nms.v1_8_R3.NMSManager_18R3;
@@ -69,6 +70,8 @@ public class NMS
                     manager = new NMSManager_110R1();
                 else if (pack.equals("v1_11_R1"))
                     manager = new NMSManager_111R1();
+                else if (pack.equals("v1_12_R1"))
+                    manager = new NMSManager_112R1();
                 else
                     Bukkit.getLogger().info("StopGen doesn't support the version " + pack);
             }
