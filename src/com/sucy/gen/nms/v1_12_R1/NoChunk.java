@@ -30,6 +30,7 @@ import net.minecraft.server.v1_12_R1.BlockPosition;
 import net.minecraft.server.v1_12_R1.Blocks;
 import net.minecraft.server.v1_12_R1.Chunk;
 import net.minecraft.server.v1_12_R1.ChunkGenerator;
+import net.minecraft.server.v1_12_R1.EnumSkyBlock;
 import net.minecraft.server.v1_12_R1.IBlockData;
 import net.minecraft.server.v1_12_R1.IChunkProvider;
 import net.minecraft.server.v1_12_R1.World;
@@ -79,6 +80,9 @@ public class NoChunk extends Chunk
     {
         return null;
     }
+
+    @Override
+    public void a(EnumSkyBlock enumskyblock, BlockPosition blockposition, int i) { }
 
     /**
      * No need to populate the chunk
