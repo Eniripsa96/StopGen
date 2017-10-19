@@ -1,14 +1,15 @@
-package com.sucy.gen.nms.v1_9_R1;
+package com.sucy.gen.nms.v1_12_R1;
 
-import net.minecraft.server.v1_9_R1.BlockPosition;
-import net.minecraft.server.v1_9_R1.Blocks;
-import net.minecraft.server.v1_9_R1.IBlockData;
-import net.minecraft.server.v1_9_R1.World;
+import net.minecraft.server.v1_12_R1.BlockPosition;
+import net.minecraft.server.v1_12_R1.Blocks;
+import net.minecraft.server.v1_12_R1.EnumSkyBlock;
+import net.minecraft.server.v1_12_R1.IBlockData;
+import net.minecraft.server.v1_12_R1.World;
 
 /**
  * Represents a chunk that wasn't generated and won't be saved
  */
-public class NoChunk extends net.minecraft.server.v1_9_R1.Chunk
+public class NoChunk extends net.minecraft.server.v1_12_R1.Chunk
 {
     /**
      * Initializes the chunk
@@ -50,4 +51,7 @@ public class NoChunk extends net.minecraft.server.v1_9_R1.Chunk
     {
         return null;
     }
+
+    @Override
+    public void a(EnumSkyBlock enumskyblock, BlockPosition blockposition, int i) { }
 }
