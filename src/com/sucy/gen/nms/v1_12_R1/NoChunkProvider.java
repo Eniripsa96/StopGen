@@ -10,7 +10,6 @@ import net.minecraft.server.v1_12_R1.CrashReportSystemDetails;
 import net.minecraft.server.v1_12_R1.IChunkLoader;
 import net.minecraft.server.v1_12_R1.ReportedException;
 import net.minecraft.server.v1_12_R1.WorldServer;
-import org.bukkit.craftbukkit.v1_12_R1.util.LongHash;
 
 /**
  * A modified chunk provider that prevents the generation of chunks
@@ -42,43 +41,30 @@ public class NoChunkProvider
     @Override
     public Chunk originalGetChunkAt(int i, int j)
     {
-        Chunk chunk = getOrLoadChunkAt(i, j);
+        Chunk chunk = this.originalGetOrLoadChunkAt(i, j);
+        if (chunk == null) {
+            long k = ChunkCoordIntPair.a(i, j);
 
-        if (chunk == null)
-        {
-            chunk = loadChunk(i, j);
-            boolean newChunk = false;
-            boolean empty = false;
-            if (chunk == null)
-            {
-                if (StopGen.shouldGenerate(world.getWorld().getName(), i, j))
-                {
-                    try
-                    {
-                        chunk = this.chunkGenerator.getOrCreateChunk(i, j);
-                    }
-                    catch (Throwable throwable)
-                    {
-                        CrashReport crashreport = CrashReport.a(throwable, "Exception generating new chunk");
-                        CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Chunk to be generated");
-
-                        crashreportsystemdetails.a("Location", String.format("%d,%d", i, j));
-                        crashreportsystemdetails.a("Position hash", ChunkCoordIntPair.a(i, j));
-                        crashreportsystemdetails.a("Generator", this.chunkGenerator);
-                        throw new ReportedException(crashreport);
-                    }
-                    newChunk = true;
+            boolean newChunk = true;
+            if (StopGen.shouldGenerate(world.getWorld().getName(), i, j)) {
+                try {
+                    chunk = this.chunkGenerator.getOrCreateChunk(i, j);
+                } catch (Throwable var9) {
+                    CrashReport crashreport = CrashReport.a(var9, "Exception generating new chunk");
+                    CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Chunk to be generated");
+                    crashreportsystemdetails.a("Location", String.format("%d,%d", i, j));
+                    crashreportsystemdetails.a("Position hash", k);
+                    crashreportsystemdetails.a("Generator", this.chunkGenerator);
+                    throw new ReportedException(crashreport);
                 }
-                else
-                {
-                    chunk = new NoChunk(world, i, j);
-                    empty = true;
-                }
+            } else {
+                chunk = new NoChunk(world, i, j);
+                newChunk = false;
             }
 
-            this.chunks.put(LongHash.toLong(i, j), chunk);
+            this.chunks.put(k, chunk);
             chunk.addEntities();
-            chunk.loadNearby(this, chunkGenerator, newChunk);
+            chunk.loadNearby(this, this.chunkGenerator, newChunk);
         }
 
         return chunk;
