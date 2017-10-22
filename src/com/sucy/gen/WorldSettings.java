@@ -82,6 +82,8 @@ public class WorldSettings
                 double dx = i - x;
                 double dz = j - z;
                 return (dx * dx) / (width * width) + (dz * dz) / (height * height) <= 1;
+            case GRID:
+                return ((i -x) % 10) + ((j - z) % 10) == 0;
         }
         return true;
     }
